@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "es2020",                                  
+    "lib": ["es2020", "dom"],                            
+    
+    /* Modules */
+    "module": "ESNext",                                  
+    "moduleResolution": "node",                          
+    "rootDir": "./src",                                  
+    "outDir": "./dist",                                  
+    "resolveJsonModule": true,                           
+    
+    /* Emit */
+    "declaration": true,                                 
+    "declarationMap": true,                              
+    "sourceMap": true,                                   
+    
+    /* Interop Constraints */
+    "esModuleInterop": true,                             
+    "forceConsistentCasingInFileNames": true,            
+    
+    /* Type Checking */
+    "strict": true,                                      
+    "noImplicitAny": true,                               
+    "strictNullChecks": true,                            
+    "noImplicitReturns": true,                           
+    
+    /* Completeness */
+    "skipLibCheck": true                                 
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "**/__tests__/**"]
+}

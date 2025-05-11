@@ -1,0 +1,61 @@
+{
+  "name": "aptos-script-composer-ts-sdk",
+  "version": "0.0.1",
+  "description": "TypeScript SDK for Aptos Script Composer",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/esm/index.mjs"
+    }
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "pnpm clean && tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"__tests__/**/*.{ts,tsx}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"__tests__/**/*.{ts,tsx}\"",
+    "lint": "eslint --ext .ts,.tsx src __tests__",
+    "lint:fix": "eslint --ext .ts,.tsx --fix src __tests__"
+  },
+  "keywords": [
+    "aptos",
+    "blockchain",
+    "typescript",
+    "sdk"
+  ],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@types/node": "22.15.17",
+    "@typescript-eslint/eslint-plugin": "^8.32.0",
+    "@typescript-eslint/parser": "^8.32.0",
+    "eslint": "^9.26.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "globals": "^16.1.0",
+    "prettier": "^3.5.3",
+    "rimraf": "6.0.1",
+    "ts-node": "^10.9.2",
+    "tsup": "8.4.0",
+    "typescript": "5.8.3",
+    "vitest": "^3.1.3"
+  },
+  "dependencies": {
+    "@aptos-labs/ts-sdk": "^2.0.0",
+    "@wgb5445/aptos-dynamic-transaction-composer": "^0.1.3",
+    "buffer": "^6.0.3"
+  }
+}
