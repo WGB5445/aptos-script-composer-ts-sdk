@@ -1,13 +1,19 @@
 import {
+  AccountAddress,
+  AccountAddressInput,
+  AptosConfig,
   convertArgument,
   Deserializer,
   EntryFunctionArgumentTypes,
+  generateRawTransaction,
   getFunctionParts,
   Hex,
+  InputGenerateTransactionOptions,
   MoveFunctionId,
   MoveModule,
   MoveModuleBytecode,
   SimpleEntryFunctionArgumentTypes,
+  SimpleTransaction,
   standardizeTypeTags,
   TransactionPayloadScript,
   TypeArgument,
@@ -121,4 +127,23 @@ export class AptosScriptComposer {
   public static multi_signer(signerCount: number): ScriptComposer {
     return new ScriptComposer(TransactionComposer.multi_signer(signerCount))
   }
+}
+
+
+export async function scriptComposerSimpleTransaction(args: {
+  sender: AccountAddressInput;
+  builder: (builder: ScriptComposer) => Promise<ScriptComposer>;
+  options?: InputGenerateTransactionOptions;
+  withFeePayer?: boolean;
+  config: AptosConfig;
+}): Promise<SimpleTransaction> {
+  const composer = new ScriptComposer(TransactionComposer.single_signer());
+  const builder = await args.builder(composer);
+  const transactionPayloadScript = builder.build();
+  const rawTxn = await generateRawTransaction({
+    aptosConfig: args.config,
+    payload: transactionPayloadScript,
+    ...args,
+  });2
+  return new SimpleTransaction(rawTxn, args.withFeePayer === true ? AccountAddress.ZERO : undefined);
 }

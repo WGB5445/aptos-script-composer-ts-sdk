@@ -61,6 +61,6 @@
   },
   "dependencies": {
     "@aptos-labs/ts-sdk": "^2.0.0",
-    "@wgb5445/script-composer-pack": "link:/Users/logan/code/github/wgb5445/script-composer-pack"
+    "@wgb5445/script-composer-pack": "0.0.14"
   }
 }
