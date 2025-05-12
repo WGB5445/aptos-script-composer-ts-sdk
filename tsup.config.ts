@@ -9,22 +9,25 @@ type MandatoryOptions = Options & {
 
 // Default config, used as a base template
 const DEFAULT_CONFIG: Options = {
-    bundle: true,
     clean: true, // clean up the dist folder
     dts: true, // generate dts files
     minify: true,
-    entry: ["src/index.ts"], // include all files under src
-    skipNodeModulesBundle: true,
+    entry: ["src/index.mts"],
     sourcemap: true,
     splitting: true,
-    target: "es2020",
-    platform: "node",
+    esbuildOptions(options, context) {
+      if (context.format === 'cjs') {
+        options.outdir = 'dist/cjs'
+      } else if (context.format === 'esm') {
+        options.outdir = 'dist/esm'
+      }
+    }
 };
 
 // Common.js config
 const COMMON_CONFIG: MandatoryOptions = {
     ...DEFAULT_CONFIG,
-    entry: ["src/index.ts", "src/cli/index.ts"],
+    entry: ["src/index.mts"],
     format: "cjs",
     outDir: "dist/common",
   };
@@ -32,7 +35,7 @@ const COMMON_CONFIG: MandatoryOptions = {
   // ESM config
   const ESM_CONFIG: MandatoryOptions = {
     ...DEFAULT_CONFIG,
-    entry: ["src/**/*.ts"],
+    entry: ["src/**/*.mts"],
     format: "esm",
     outDir: "dist/esm",
   };

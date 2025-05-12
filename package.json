@@ -9,8 +9,14 @@
   "exports": {
     ".": {
       "types": "./dist/esm/index.d.ts",
-      "require": "./dist/common/index.cjs",
-      "import": "./dist/esm/index.js"
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "default": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/common/index.cjs"
+      }
     }
   },
   "files": [
