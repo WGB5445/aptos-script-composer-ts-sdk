@@ -15,6 +15,7 @@ import {
 import {
   CallArgument,
   InitInput,
+  initSync,
   TransactionComposer,
 } from '@wgb5445/aptos-dynamic-transaction-composer';
 
@@ -40,8 +41,17 @@ export type InputBatchedFunctionData = {
 export class AptosScriptComposer {
   private builder: TransactionComposer;
 
-  constructor(options?: { url_or_wasmModule?: InitInput }) {
-    init(options?.url_or_wasmModule);
+  constructor(options?: { url_or_wasmModule?: string | Uint8Array | WebAssembly.Module }) {
+    if (options?.url_or_wasmModule) {
+        if( typeof options.url_or_wasmModule === 'string') {
+            init(options?.url_or_wasmModule);
+        }else {
+            initSync(options?.url_or_wasmModule);
+        }
+    }else {
+        init();
+    }
+    
     this.builder = TransactionComposer.single_signer();
   }
 

@@ -17,10 +17,9 @@ import * as path from 'path';
 import { CallArgument } from '@wgb5445/aptos-dynamic-transaction-composer';
 import { AptosScriptComposer, InputBatchedFunctionData } from '../src';
 
-async function loadWasmModule(wasmPath: string): Promise<WebAssembly.Module> {
+async function loadWasmModule(wasmPath: string): Promise<Uint8Array> {
   const resolvedPath = path.resolve(__dirname, wasmPath);
-  const wasmBuffer = fs.readFileSync(resolvedPath);
-  return WebAssembly.compile(wasmBuffer);
+  return fs.readFileSync(resolvedPath)
 }
 
 async function getModule(
@@ -56,16 +55,12 @@ describe('AptosScriptComposer Tests', async () => {
   });
 
   test('Should initialize AptosScriptComposer correctly', () => {
-    const composer = new AptosScriptComposer({
-      wasmModule,
-    });
+    const composer = new AptosScriptComposer({url_or_wasmModule:wasmModule});
     expect(composer).toBeDefined();
   });
 
   test('Should build a script transaction payload', async () => {
-    const composer = new AptosScriptComposer({
-      wasmModule,
-    });
+    const composer = new AptosScriptComposer({url_or_wasmModule:wasmModule});
 
     const moduleBytecode = await getModule('0x1', 'aptos_account', aptosConfig);
 
@@ -89,9 +84,7 @@ describe('AptosScriptComposer Tests', async () => {
   });
 
   test('Should send a transaction', async () => {
-    const composer = new AptosScriptComposer({
-      wasmModule,
-    });
+    const composer = new AptosScriptComposer({url_or_wasmModule:wasmModule});
 
     const moduleBytecode = await getModule('0x1', 'aptos_account', aptosConfig);
 
