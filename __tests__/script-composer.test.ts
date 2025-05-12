@@ -10,16 +10,16 @@ import {
   Aptos,
   generateRawTransaction,
   SimpleTransaction,
-} from '@aptos-labs/ts-sdk';
-import { describe, test, expect } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
-import { CallArgument } from '@wgb5445/aptos-dynamic-transaction-composer';
-import { AptosScriptComposer, InputBatchedFunctionData } from '../src';
+} from "@aptos-labs/ts-sdk";
+import { describe, test, expect } from "vitest";
+import * as fs from "fs";
+import * as path from "path";
+import { CallArgument } from "@wgb5445/aptos-dynamic-transaction-composer";
+import { AptosScriptComposer, InputBatchedFunctionData } from "../src";
 
 async function loadWasmModule(wasmPath: string): Promise<Uint8Array> {
   const resolvedPath = path.resolve(__dirname, wasmPath);
-  return fs.readFileSync(resolvedPath)
+  return fs.readFileSync(resolvedPath);
 }
 
 async function getModule(
@@ -30,14 +30,14 @@ async function getModule(
 ): Promise<MoveModuleBytecode | undefined> {
   const { data } = await getAptosFullNode<{}, MoveModuleBytecode>({
     aptosConfig,
-    originMethod: 'getModule',
+    originMethod: "getModule",
     path: `accounts/${AccountAddress.from(moduleAddress).toString()}/module/${moduleName}`,
     params: { ledger_version: options?.ledgerVersion },
   });
   return data;
 }
 
-describe('AptosScriptComposer Tests', async () => {
+describe("AptosScriptComposer Tests", async () => {
   const aptosConfig = new AptosConfig({
     network: Network.DEVNET,
     clientConfig: { API_KEY: process.env.APTOS_API_KEY },
@@ -45,7 +45,7 @@ describe('AptosScriptComposer Tests', async () => {
 
   const aptos = new Aptos(aptosConfig);
   const wasmPath =
-    '../node_modules/@wgb5445/aptos-dynamic-transaction-composer/aptos_dynamic_transaction_composer_bg.wasm';
+    "../node_modules/@wgb5445/aptos-dynamic-transaction-composer/aptos_dynamic_transaction_composer_bg.wasm";
   const wasmModule = await loadWasmModule(wasmPath);
 
   const account = Account.generate();
@@ -54,24 +54,24 @@ describe('AptosScriptComposer Tests', async () => {
     amount: 1_000_000,
   });
 
-  test('Should initialize AptosScriptComposer correctly', () => {
-    const composer = new AptosScriptComposer({url_or_wasmModule:wasmModule});
+  test("Should initialize AptosScriptComposer correctly", () => {
+    const composer = new AptosScriptComposer({ url_or_wasmModule: wasmModule });
     expect(composer).toBeDefined();
   });
 
-  test('Should build a script transaction payload', async () => {
-    const composer = new AptosScriptComposer({url_or_wasmModule:wasmModule});
+  test("Should build a script transaction payload", async () => {
+    const composer = new AptosScriptComposer({ url_or_wasmModule: wasmModule }).single_signer();
 
-    const moduleBytecode = await getModule('0x1', 'aptos_account', aptosConfig);
+    const moduleBytecode = await getModule("0x1", "aptos_account", aptosConfig);
 
     composer.storeModule([moduleBytecode!]);
 
-    const moduleAbi = await fetchModuleAbi('0x1', 'aptos_account', aptosConfig);
+    const moduleAbi = await fetchModuleAbi("0x1", "aptos_account", aptosConfig);
 
     const mockBatchedFunctionData: InputBatchedFunctionData = {
-      function: '0x1::aptos_account::transfer',
+      function: "0x1::aptos_account::transfer",
       typeArguments: [],
-      functionArguments: [CallArgument.newSigner(0), '0x1', 100n],
+      functionArguments: [CallArgument.newSigner(0), "0x1", 100n],
       moduleAbi: moduleAbi!,
     };
 
@@ -83,19 +83,19 @@ describe('AptosScriptComposer Tests', async () => {
     expect(scriptPayload.script.bytecode).toBeDefined();
   });
 
-  test('Should send a transaction', async () => {
-    const composer = new AptosScriptComposer({url_or_wasmModule:wasmModule});
+  test("Should send a transaction", async () => {
+    const composer = new AptosScriptComposer({ url_or_wasmModule: wasmModule }).single_signer();
 
-    const moduleBytecode = await getModule('0x1', 'aptos_account', aptosConfig);
+    const moduleBytecode = await getModule("0x1", "aptos_account", aptosConfig);
 
     composer.storeModule([moduleBytecode!]);
 
-    const moduleAbi = await fetchModuleAbi('0x1', 'aptos_account', aptosConfig);
+    const moduleAbi = await fetchModuleAbi("0x1", "aptos_account", aptosConfig);
 
     const mockBatchedFunctionData: InputBatchedFunctionData = {
-      function: '0x1::aptos_account::transfer',
+      function: "0x1::aptos_account::transfer",
       typeArguments: [],
-      functionArguments: [CallArgument.newSigner(0), '0x1', 100],
+      functionArguments: [CallArgument.newSigner(0), "0x1", 100],
       moduleAbi: moduleAbi!,
     };
 

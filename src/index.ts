@@ -11,15 +11,13 @@ import {
   standardizeTypeTags,
   TransactionPayloadScript,
   TypeArgument,
-} from '@aptos-labs/ts-sdk';
-import {
+} from "@aptos-labs/ts-sdk"
+import init, {
   CallArgument,
-  InitInput,
   initSync,
   TransactionComposer,
-} from '@wgb5445/aptos-dynamic-transaction-composer';
+} from "@wgb5445/aptos-dynamic-transaction-composer";
 
-import init from '@wgb5445/aptos-dynamic-transaction-composer';
 /**
  * The data needed to generate a batched function payload
  */
@@ -32,27 +30,11 @@ export type InputBatchedFunctionData = {
   moduleAbi: MoveModule;
 };
 
-/**
- * A wrapper class around TransactionComposer, which is a WASM library compiled
- * from aptos-core/aptos-move/script-composer.
- * This class allows the SDK caller to build a transaction that invokes multiple Move functions
- * and allow for arguments to be passed around.
- * */
-export class AptosScriptComposer {
-  private builder: TransactionComposer;
+export class ScriptComposer {
+  public builder: TransactionComposer;
 
-  constructor(options?: { url_or_wasmModule?: string | Uint8Array | WebAssembly.Module }) {
-    if (options?.url_or_wasmModule) {
-        if( typeof options.url_or_wasmModule === 'string') {
-            init(options?.url_or_wasmModule);
-        }else {
-            initSync(options?.url_or_wasmModule);
-        }
-    }else {
-        init();
-    }
-    
-    this.builder = TransactionComposer.single_signer();
+  constructor(builder: TransactionComposer) {
+    this.builder = builder;
   }
 
   async storeModule(modules: MoveModuleBytecode[]): Promise<string[]> {
@@ -116,5 +98,34 @@ export class AptosScriptComposer {
   build(): TransactionPayloadScript {
     const script = TransactionPayloadScript.load(new Deserializer(this.build_bytes()));
     return script;
+  }
+}
+
+/**
+ * A wrapper class around TransactionComposer, which is a WASM library compiled
+ * from aptos-core/aptos-move/script-composer.
+ * This class allows the SDK caller to build a transaction that invokes multiple Move functions
+ * and allow for arguments to be passed around.
+ * */
+
+export class AptosScriptComposer {
+  constructor(options?: { url_or_wasmModule?: string | Uint8Array | WebAssembly.Module }) {
+    if (options?.url_or_wasmModule) {
+      if (typeof options.url_or_wasmModule === "string") {
+        init(options?.url_or_wasmModule);
+      } else {
+        initSync(options?.url_or_wasmModule);
+      }
+    } else {
+      init();
+    }
+  }
+
+  public static single_signer(): ScriptComposer {
+    return new ScriptComposer(TransactionComposer.single_signer())
+  }
+
+  public static multi_signer(signerCount: number): ScriptComposer {
+    return new ScriptComposer(TransactionComposer.multi_signer(signerCount))
   }
 }
