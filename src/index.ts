@@ -12,11 +12,12 @@ import {
   TransactionPayloadScript,
   TypeArgument,
 } from "@aptos-labs/ts-sdk"
-import init, {
+import  {
+  wasmModule,
   CallArgument,
   initSync,
   TransactionComposer,
-} from "@wgb5445/aptos-dynamic-transaction-composer";
+} from "@wgb5445/script-composer-pack";
 
 /**
  * The data needed to generate a batched function payload
@@ -109,16 +110,8 @@ export class ScriptComposer {
  * */
 
 export class AptosScriptComposer {
-  constructor(options?: { url_or_wasmModule?: string | Uint8Array | WebAssembly.Module }) {
-    if (options?.url_or_wasmModule) {
-      if (typeof options.url_or_wasmModule === "string") {
-        init(options?.url_or_wasmModule);
-      } else {
-        initSync(options?.url_or_wasmModule);
-      }
-    } else {
-      init();
-    }
+  constructor() { 
+    initSync(wasmModule);
   }
 
   public static single_signer(): ScriptComposer {

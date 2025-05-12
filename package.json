@@ -55,7 +55,6 @@
   },
   "dependencies": {
     "@aptos-labs/ts-sdk": "^2.0.0",
-    "@wgb5445/aptos-dynamic-transaction-composer": "^0.1.3",
-    "buffer": "^6.0.3"
+    "@wgb5445/script-composer-pack": "link:/Users/logan/code/github/wgb5445/script-composer-pack"
   }
 }

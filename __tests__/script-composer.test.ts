@@ -12,15 +12,8 @@ import {
   SimpleTransaction,
 } from "@aptos-labs/ts-sdk";
 import { describe, test, expect } from "vitest";
-import * as fs from "fs";
-import * as path from "path";
-import { CallArgument } from "@wgb5445/aptos-dynamic-transaction-composer";
+import { CallArgument } from "@wgb5445/script-composer-pack";
 import { AptosScriptComposer, InputBatchedFunctionData } from "../src";
-
-async function loadWasmModule(wasmPath: string): Promise<Uint8Array> {
-  const resolvedPath = path.resolve(__dirname, wasmPath);
-  return fs.readFileSync(resolvedPath);
-}
 
 async function getModule(
   moduleAddress: string,
@@ -43,10 +36,8 @@ describe("AptosScriptComposer Tests", async () => {
     clientConfig: { API_KEY: process.env.APTOS_API_KEY },
   });
 
+  new AptosScriptComposer();
   const aptos = new Aptos(aptosConfig);
-  const wasmPath =
-    "../node_modules/@wgb5445/aptos-dynamic-transaction-composer/aptos_dynamic_transaction_composer_bg.wasm";
-  const wasmModule = await loadWasmModule(wasmPath);
 
   const account = Account.generate();
   await aptos.faucet.fundAccount({
@@ -55,19 +46,18 @@ describe("AptosScriptComposer Tests", async () => {
   });
 
   test("Should initialize AptosScriptComposer correctly", () => {
-    const composer = new AptosScriptComposer({ url_or_wasmModule: wasmModule });
+    const composer = new AptosScriptComposer();
     expect(composer).toBeDefined();
   });
 
   test("Should build a script transaction payload", async () => {
-    const composer = new AptosScriptComposer({ url_or_wasmModule: wasmModule }).single_signer();
+    const composer = AptosScriptComposer.single_signer();
 
     const moduleBytecode = await getModule("0x1", "aptos_account", aptosConfig);
 
     composer.storeModule([moduleBytecode!]);
 
     const moduleAbi = await fetchModuleAbi("0x1", "aptos_account", aptosConfig);
-
     const mockBatchedFunctionData: InputBatchedFunctionData = {
       function: "0x1::aptos_account::transfer",
       typeArguments: [],
@@ -84,7 +74,7 @@ describe("AptosScriptComposer Tests", async () => {
   });
 
   test("Should send a transaction", async () => {
-    const composer = new AptosScriptComposer({ url_or_wasmModule: wasmModule }).single_signer();
+    const composer = AptosScriptComposer.single_signer();
 
     const moduleBytecode = await getModule("0x1", "aptos_account", aptosConfig);
 

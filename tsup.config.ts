@@ -19,11 +19,6 @@ const DEFAULT_CONFIG: Options = {
     splitting: true,
     target: "es2020",
     platform: "node",
-    // external: [
-    //     '@aptos-labs/ts-sdk',
-    //     '@wgb5445/aptos-dynamic-transaction-composer',
-    //     'buffer'
-    //   ]
 };
 
 // Common.js config
