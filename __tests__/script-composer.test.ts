@@ -13,7 +13,7 @@ import {
 } from "@aptos-labs/ts-sdk";
 import { describe, test, expect } from "vitest";
 import { CallArgument } from "@wgb5445/script-composer-pack";
-import { AptosScriptComposer, InputBatchedFunctionData } from "../src";
+import { AptosScriptComposer, InputBatchedFunctionData } from "../src/index.mts";
 
 async function getModule(
   moduleAddress: string,
