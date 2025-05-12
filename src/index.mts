@@ -24,7 +24,7 @@ import  {
   initSync,
   TransactionComposer,
 } from "@wgb5445/script-composer-pack";
-
+export * from "@wgb5445/script-composer-pack";
 /**
  * The data needed to generate a batched function payload
  */
