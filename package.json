@@ -1,6 +1,6 @@
 {
   "name": "aptos-script-composer-ts-sdk",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "TypeScript SDK for Aptos Script Composer",
   "main": "dist/common/index.cjs",
   "module": "dist/esm/index.js",
