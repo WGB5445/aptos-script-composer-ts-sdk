@@ -15,9 +15,9 @@ import {
 import {
   CallArgument,
   TransactionComposer,
-  initSync,
 } from '@wgb5445/aptos-dynamic-transaction-composer';
 
+import init from '@wgb5445/aptos-dynamic-transaction-composer';
 /**
  * The data needed to generate a batched function payload
  */
@@ -40,7 +40,7 @@ export class AptosScriptComposer {
   private builder: TransactionComposer;
 
   constructor(options?: { url?: string; wasmModule?: WebAssembly.Module }) {
-    initSync({ module: options?.wasmModule || undefined });
+    init(options?.url ? options.url : options?.wasmModule ? options.wasmModule : undefined);
     this.builder = TransactionComposer.single_signer();
   }
 

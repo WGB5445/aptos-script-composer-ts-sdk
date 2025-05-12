@@ -3,14 +3,14 @@
   "version": "0.0.1",
   "description": "TypeScript SDK for Aptos Script Composer",
   "main": "dist/cjs/index.cjs",
-  "module": "dist/esm/index.mjs",
-  "types": "dist/index.d.ts",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/esm/index.d.ts",
       "require": "./dist/cjs/index.cjs",
-      "import": "./dist/esm/index.mjs"
+      "import": "./dist/esm/index.js"
     }
   },
   "files": [
